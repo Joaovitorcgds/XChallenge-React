@@ -6,6 +6,7 @@ import { Home } from './Home';
 
 
 function App() {
+  // const user = useSelector(selectUser)
   const theme = createTheme({
     palette:{
       primary:{

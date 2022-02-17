@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import  { useDispatch } from "react-redux"
+import { login } from "../features/useSlice";
+
 import { Grid, makeStyles, Button } from "@material-ui/core";
 import clsx from 'clsx';
 import IconButton from '@material-ui/core/IconButton';
@@ -29,12 +32,11 @@ const useStyles = makeStyles(theme => ({
 
 export function Form(){
   const classes = useStyles();
+  const dispatch = useDispatch();
   const [values, setValues] = useState({
-    amount: '',
+    email: '',
     password: '',
-    weight: '',
-    weightRange: '',
-    showPassword: false,
+    showPassword: false
   });
 
   const handleChange = (prop) => (event) => {
@@ -49,9 +51,20 @@ export function Form(){
     event.preventDefault();
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(dispatch(login({
+        email: values.email,
+        password: values.password
+      }))
+    )
+  
+    setValues({email: "", password: "", showPassword: false})
+  }
+
   return (
     <div className={classes.root}>
-      <form onSubmit={(e) => e.preventDefault()}>
+      <form onSubmit={e => handleSubmit(e)}>
         <Grid container spacing={3}>
           <Grid item>
             <FormControl className={clsx(classes.margin, classes.textField)} required>
@@ -59,7 +72,9 @@ export function Form(){
               <Input
                 id="standard-email"
                 type="email"
-                fullWidth/>
+                fullWidth 
+                onChange={handleChange("email")}
+                value={values.email}/>
             </FormControl>
           </Grid>
         </Grid>
@@ -90,7 +105,7 @@ export function Form(){
 
         <Grid container justifyContent="center" spacing={3}>
           <Grid item className={clsx(classes.margin)}>
-            <Button variant="outlined" color="primary">Entrar</Button>
+            <Button variant="outlined" color="primary" type="submit">Entrar</Button>
           </Grid>
         </Grid>
       </form>
